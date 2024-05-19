@@ -23,7 +23,6 @@ def index():
 		applications = db.session.query(StudentApplication).all()
 	except Exception as e:
 		applications = []
-		print('Error obteniendo las solicitudes: ', e)
 	return render_template('student_applications/index.html', applications=applications)
 
 # Procesa las solicitudes de ingreso
@@ -139,7 +138,7 @@ def update_student_applications(application_id):
 						else:
 							return build_response({'message': f'Tu solicitud no fue actualizada por que el Identificador {data["identification"]} ya fue usado.'}, 400)
 				errors = '\n'.join(errors)
-				return build_response({'message': f'Tu solicitud no fue actualizada por las siguientes razones: {errors}.'}, 400)
+				return build_response({'message': f'Tu solicitud no fue actualizada por las siguientes razones: {errors}'}, 400)
 			else:
 				return build_response({'message': f'Tu solicitud no fue actualizada por que ya esta asignada.'}, 400)
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
