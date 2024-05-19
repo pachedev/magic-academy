@@ -12,7 +12,7 @@ def get_student_applications():
 	try:
 		applications = db.session.query(StudentApplication).all()
 		applications_data = [sa.json() for sa in applications]
-		return build_response(applications_data, 200)
+		return build_response({'message': 'Solicitudes obtenidas exitosamente.', 'applications': applications_data}, 200)
 	except Exception as e:
 		return build_response({'message': 'Ocurrio un error obtener las solicitudes.', 'error': str(e)}, 500)
 
