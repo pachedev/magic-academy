@@ -23,7 +23,7 @@ class StudentApplication(Base):
 	last_name = Column(String(20), nullable=False)
 	identification = Column(String(10), nullable=False)
 	age = Column(Integer, nullable=False)
-	magic_affinity = Column(ChoiceType(MAGICAL_AFFINITIES), nullable=False)
+	magic_affinity = Column(ChoiceType(MAGICAL_AFFINITIES), nullable=True)
 	state = Column(ChoiceType(STATES), default='received')
 	assignment_id = Column(Integer, ForeignKey('grimorio_assignment.assignment_id'), nullable=True)
 	created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)

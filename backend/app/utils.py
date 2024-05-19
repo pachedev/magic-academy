@@ -1,3 +1,4 @@
+from flask import jsonify, make_response
 from re import match
 from datetime import timedelta
 from random import choices
@@ -21,19 +22,17 @@ APPLICATION_REQUIRED_FIELDS = {
 		'description': 'solo letras, máximo 20 caracteres.',
 	},
 	'magic_affinity': {
-		'regex': '^(darkness|light|fire|water|wind|earth|oscuridad|luz|fuego|agua|viento|tierra)$',
-		'description': 'Una única opción entre Oscuridad, Luz, Fuego, Agua, Viento o Tierra.',
+		'regex': '^(darkness|light|fire|water|wind|earth)$',
+		'description': 'una única opción entre Oscuridad(darkness), Luz(light), Fuego(fire), Agua(water), Viento(wind) o Tierra(earth).',
 	}
 }
-# Equivalencias de las afinidades magicas
-MAGIC_AFFINITIES = {
-	'oscuridad': 'darkness',
-	'luz': 'light',
-	'fuego': 'fire',
-	'agua': 'water',
-	'viento': 'wind',
-	'tierra': 'earth'
-}
+
+# Afinidades mágicas validas
+MAGIC_AFFINITIES = ['darkness', 'light', 'fire', 'water', 'wind', 'earth']
+
+# Estados permitidos para realizar la actualización de estado en las solicitudes (Aprobar(assigned), Rechazar(rejected))
+APPLICATION_STATES = ['assigned', 'rejected']
+
 # Validad la que un valor cumpla con x expresión regular
 def review_information_received(value, regular_expression):
 	if value:
@@ -59,3 +58,8 @@ def compare_required_fields(object1, object2):
 # Cuanto mayor sea el peso, mayor será la probabilidad de que se seleccione esa opción.
 def get_random_grimorio(grimorios, weights, options=1):
 	return choices(grimorios, weights=weights, k=options)[0]
+
+# Construye una respuesta estandar para el API
+def build_response(body, code=200):
+	formatted_body = jsonify(body)
+	return make_response(formatted_body, code)

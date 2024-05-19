@@ -1,4 +1,4 @@
-from flask import render_template, jsonify
+from flask import render_template
 from app.main import bp
 from app.extensions import db
 from app.models.grimorio import Grimorio
@@ -9,5 +9,4 @@ def index():
 		grimorios = db.session.query(Grimorio).all()
 	except Exception as e:
 		grimorios = []
-		print('Error obteniendo el catálogo de grimorios: ', e)
 	return render_template('index.html', grimorios=grimorios)
