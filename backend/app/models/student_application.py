@@ -33,4 +33,4 @@ class StudentApplication(Base):
 		return f'<StudentApplication "{self.application_id}">'
 
 	def json(self):
-		return {'id': self.application_id, 'name': self.name, 'last_name': self.last_name, 'identification': self.identification, 'age': self.age, 'magic_affinity': {'code': self.magic_affinity.code, 'value': self.magic_affinity.value}, 'state': {'code': self.state.code, 'value': self.state.value}, 'assignment_id': self.assignment_id, 'created_at': parse_datetime_to_str(self.created_at), 'updated_at': parse_datetime_to_str(self.updated_at)}
+		return {'id': self.application_id, 'name': self.name, 'last_name': self.last_name, 'identification': self.identification, 'age': self.age, 'magic_affinity': {'code': self.magic_affinity.code, 'value': self.magic_affinity.value} if self.magic_affinity else {}, 'state': {'code': self.state.code, 'value': self.state.value}, 'assignment_id': self.assignment_id, 'created_at': parse_datetime_to_str(self.created_at), 'updated_at': parse_datetime_to_str(self.updated_at)}
