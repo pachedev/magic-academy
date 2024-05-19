@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">{% block title %} Caso práctico {% endblock %}</h1>
+			<p class="lead text-muted text-left">
+				En el Reino del Trébol, el Rey Mago necesita un sistema para la academia de magia
+				que administre el registro de solicitud de estudiantes y la asignación aleatoria de
+				sus Grimorios.
+			</p>
+			<p class="lead text-muted text-left">
+				Los Grimorios se clasifican según el tipo de trébol en la portada, y
+				los estudiantes según sus afinidades mágicas específicas.
+			</p>
+		</div>
+	</section>
+	<div class="py-4 bg-light">
+		<div class="container">
+			<h2 class="py-4 text-center">Grimorios</h2>
+			<div class="row">
+				{% for grimorio in grimorios %}
+				<div class="col-md-4">
+					<div class="card mb-4 box-shadow align-items-center">
+						<img class="card-img-top"
+							data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text={{ grimorio.name}}"
+							alt="{{ grimorio.name}}" style="height: auto; width: 50%; display: block;"
+							src="{{ grimorio.image }}"
+							data-holder-rendered="true" loading="lazy">
+						<div class="card-body">
+							<p class="card-text fw-semibold text-center">{{ grimorio.name }}</p>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item"><i class="bi bi-journal-medical"></i> Tipo: {{ grimorio.clover_type }}</li>
+								<li class="list-group-item"><i class="bi bi-stars"></i> Rareza: {{ grimorio.rarity }}</li>
+							</ul>
+							<div class="mt-2 align-items-end text-right">
+								<i class="bi bi-bar-chart-line-fill"></i> <small class="text-muted">Peso: {{ grimorio.weight }}</small>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

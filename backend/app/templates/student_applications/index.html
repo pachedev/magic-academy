@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">{% block title %} Solicitudes de estudiantes {% endblock %}</h1>
+			<p class="lead text-muted">
+				Aquí podrás ver todas las aplicaciones recibidas en el sistema.
+			</p>
+		</div>
+	</section>
+	<div class="py-4 bg-light">
+		<div class="container">
+			<h2 class="py-4 text-center">Solicitudes recibidas</h2>
+			<div class="row">
+				{% for application in applications %}
+				<div class="col-md-4">
+					<div class="card mb-4 box-shadow">
+						<div class="card-body">
+							<p class="card-text fw-semibold text-center">{{ application.name }} {{ application.last_name }}</p>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item"><i class="bi bi-journal-medical"></i> ID: {{ application.application_id }}</li>
+								<li class="list-group-item"><i class="bi bi-person-hearts"></i> Edad: {{ application.age }}</li>
+								<li class="list-group-item"><i class="bi bi-magic"></i> Afinidad mágica: {{ application.magic_affinity }}</li>
+								<li class="list-group-item"><i class="bi bi-person-vcard"></i> Identificación: {{ application.identification }}</li>
+							</ul>
+							<div class="mt-2 align-items-end text-right">
+								<i class="bi bi-envelope-paper-heart-fill"></i> <small class="text-muted">Estado: {{ application.state }}</small>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
