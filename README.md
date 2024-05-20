@@ -126,7 +126,7 @@ http://localhost:3000
 
 ## ¿Comó consumir el API?
 
-A continuación se muestra una documentación secilla para consumir el API, está la puedes encontrar en la siguiente url con la definición del [swagger](https://app.swaggerhub.com/apis/gpachecob/magic-academy/1.0.0).
+A continuación se muestra una documentación secilla para consumir el API, está la puedes encontrar en la siguiente url con la definición de [swagger](https://app.swaggerhub.com/apis/gpachecob/magic-academy/1.0.0) y [postman](https://www.postman.com/planetary-robot-226590/workspace/magic-academy/collection/21302699-c12ff45b-9b7f-43c5-a4ae-c87186c904ce?tab=overview).
 
 #### Crea una nueva solicitud de ingreso
 
