@@ -16,7 +16,7 @@ services:
   # Flask service
   backend:
     container_name: flask_app
-    image: flask_app:1.0.0
+    image: flask_app:1.0.1
     build:
       context: ./backend
       dockerfile: flask.dockerfile

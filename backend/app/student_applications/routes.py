@@ -145,7 +145,7 @@ def update_student_applications(application_id):
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
 		print("Error: ", e)
-		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)
+		return build_response({'message': 'Ocurrio un error al actualizar la solicitud: ', 'error': str(e)}, 500)
 
 # Actualiza el estado de las solicitudes de ingreso.
 @bp.route('/solicitud/<int:application_id>/status', methods=['PATCH'],strict_slashes=False)
@@ -204,7 +204,7 @@ def update_state_student_applications(application_id):
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
 		print("Error: ", e)
-		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)
+		return build_response({'message': 'Ocurrio un error al actualizar el estado de la solicitud: ', 'error': str(e)}, 500)
 
 # Elimina solicitudes de ingreso.
 @bp.route('/solicitud/<int:application_id>', methods=['DELETE'], strict_slashes=False)
@@ -215,15 +215,10 @@ def delete_student_applications(application_id):
 			if not application.assignment_id:
 				db.session.delete(application)
 				db.session.commit()
+				return build_response({'message': 'Se ha eliminado la solicitud de ingreso.'}, 200)
 			else:
-				assignment = db.session.query(StudentApplication).filter_by(assignment_id=application.assignment_id).first()
-				db.session.delete(application)
-				db.session.commit()
-				if assignment:
-					db.session.delete(assignment)
-					db.session.commit()
-			return build_response({'message': 'Se ha eliminado la solicitud de ingreso.'}, 200)
+				return build_response({'message': 'La solicitud no fue borrada por que ya cuenta con un Grimorio asignado.'}, 400)
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
 		print("Error: ", e)
-		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)
+		return build_response({'message': 'Ocurrio un error al eliminar la solicitud: ', 'error': str(e)}, 500)
