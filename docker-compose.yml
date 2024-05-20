@@ -1,6 +1,18 @@
 services:
- # Flask service
-  flaskapp:
+  # Next.js service
+  frontend:
+      container_name: nextjs_app
+      image: nextjs_app:1.0.0
+      build:
+        context: ./frontend
+        dockerfile: frontend.dockerfile
+      ports:
+        - 3000:3000
+      restart: always
+      depends_on:
+        - backend
+  # Flask service
+  backend:
     container_name: flask_app
     image: flask_app:1.0.0
     build:
@@ -16,7 +28,6 @@ services:
       - SECRET_KEY=${FLASK_SECRET_KEY}
     depends_on:
       - db
-
   # DB service
   db:
     container_name: postgres_db
