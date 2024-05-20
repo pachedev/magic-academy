@@ -3,7 +3,7 @@ from app.main import bp
 from app.extensions import db
 from app.models.grimorio import Grimorio
 
-@bp.route('/')
+@bp.route('/',strict_slashes=False)
 def index():
 	try:
 		grimorios = db.session.query(Grimorio).all()

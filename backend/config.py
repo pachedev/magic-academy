@@ -1,8 +1,13 @@
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 class Config:
 	SECRET_KEY = os.environ.get('SECRET_KEY')
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+class TestingConfig:
+	TESTING = True
+	SECRET_KEY = os.environ.get('SECRET_KEY')
+	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_TEST_URI')
+	SQLALCHEMY_TRACK_MODIFICATIONS = False
+	WTF_CSRF_ENABLED = False

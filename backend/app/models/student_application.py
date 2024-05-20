@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, DateTime, func
 from sqlalchemy_utils import ChoiceType
 from app.utils import parse_datetime_to_str
+from sqlalchemy import event, DDL
 from app.extensions import Base
-
 class StudentApplication(Base):
 	__tablename__ = 'student_application'
 	STATES = [
@@ -34,3 +34,10 @@ class StudentApplication(Base):
 
 	def json(self):
 		return {'id': self.application_id, 'name': self.name, 'last_name': self.last_name, 'identification': self.identification, 'age': self.age, 'magic_affinity': {'code': self.magic_affinity.code, 'value': self.magic_affinity.value} if self.magic_affinity else {}, 'state': {'code': self.state.code, 'value': self.state.value}, 'assignment_id': self.assignment_id, 'created_at': parse_datetime_to_str(self.created_at), 'updated_at': parse_datetime_to_str(self.updated_at)}
+
+# Inicializa los valores para correr pruebas unitarias
+event.listen(StudentApplication.__table__, 'after_create', DDL(""" INSERT INTO student_application (name, last_name, identification, age, magic_affinity, state) VALUES 
+	('Harry', 'Potter', 'A123456789', 17, 'light','rejected'),
+	('Hermione', 'Granger', '1234567891', 18, 'darkness','rejected'),
+	('Ron', 'Weasley', 'C123456789', 19, 'light','rejected')
+	"""))

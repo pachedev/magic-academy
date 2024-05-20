@@ -4,7 +4,7 @@ from app.models.grimorio import Grimorio
 from app.utils import build_response
 
 
-@bp.route('/', methods=['GET'])
+@bp.route('/', methods=['GET'], strict_slashes=False)
 def get_grimorios():
 	try:
 		grimorios = db.session.query(Grimorio).all()

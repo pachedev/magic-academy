@@ -7,7 +7,7 @@ from app.models.student_application import StudentApplication
 from app.utils import build_response, APPLICATION_REQUIRED_FIELDS, APPLICATION_STATES, review_information_received, compare_required_fields, get_random_grimorio
 
 # Consulta todas las solicitudes.
-@bp.route('/solicitudes', methods=['GET'])
+@bp.route('/solicitudes', methods=['GET'],strict_slashes=False)
 def get_student_applications():
 	try:
 		applications = db.session.query(StudentApplication).all()
@@ -17,7 +17,7 @@ def get_student_applications():
 		return build_response({'message': 'Ocurrio un error obtener las solicitudes.', 'error': str(e)}, 500)
 
 # Consulta todas las solicitudes y las muestra
-@bp.route('/solicitudes/view')
+@bp.route('/solicitudes/view',strict_slashes=False)
 def index():
 	try:
 		applications = db.session.query(StudentApplication).all()
@@ -26,7 +26,7 @@ def index():
 	return render_template('student_applications/index.html', applications=applications)
 
 # Procesa las solicitudes de ingreso
-@bp.route('/solicitud', methods=['POST'])
+@bp.route('/solicitud', methods=['POST'],strict_slashes=False)
 def create_student_application():
 	try:
 		data = request.get_json()
@@ -83,10 +83,11 @@ def create_student_application():
 				return build_response({'message': f'Ya existe una solicitud con el identificador: {data["identification"]}.'}, 400)
 		return build_response({'message': 'Los campos Nombre, Apellido, Identificación, Edad y Afinidad Mágica son requeridos.'}, 400)
 	except Exception as e:
+		print("Error: ",e)
 		return build_response({'message': 'Ocurrio un error al crear la solicitud.', 'error': str(e)}, 500)
 
 # Actualiza las solicitudes de ingreso.
-@bp.route('/solicitud/<int:application_id>', methods=['PUT'])
+@bp.route('/solicitud/<int:application_id>', methods=['PUT'],strict_slashes=False)
 def update_student_applications(application_id):
 	try:
 		application = db.session.query(StudentApplication).filter_by(application_id=application_id).first()
@@ -143,10 +144,11 @@ def update_student_applications(application_id):
 				return build_response({'message': f'Tu solicitud no fue actualizada por que ya esta asignada.'}, 400)
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
+		print("Error: ", e)
 		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)
 
 # Actualiza el estado de las solicitudes de ingreso.
-@bp.route('/solicitud/<int:application_id>/status', methods=['PATCH'])
+@bp.route('/solicitud/<int:application_id>/status', methods=['PATCH'],strict_slashes=False)
 def update_state_student_applications(application_id):
 	try:
 		application = db.session.query(StudentApplication).filter_by(application_id=application_id).first()
@@ -201,10 +203,11 @@ def update_state_student_applications(application_id):
 			return build_response({'message': f'El estado de la solicitud de ingreso no fue actualizada por las siguientes razones: {errors}'}, 400)
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
+		print("Error: ", e)
 		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)
 
 # Elimina solicitudes de ingreso.
-@bp.route('/solicitud/<int:application_id>', methods=['DELETE'])
+@bp.route('/solicitud/<int:application_id>', methods=['DELETE'], strict_slashes=False)
 def delete_student_applications(application_id):
 	try:
 		application = db.session.query(StudentApplication).filter_by(application_id=application_id).first()
@@ -222,4 +225,5 @@ def delete_student_applications(application_id):
 			return build_response({'message': 'Se ha eliminado la solicitud de ingreso.'}, 200)
 		return build_response({'message': 'La solicitud de ingreso no existe.'}, 404)
 	except Exception as e:
+		print("Error: ", e)
 		return build_response({'message': 'Ocurrio un error al obtener la solicitud: ', 'error': str(e)}, 500)

@@ -6,23 +6,23 @@ from random import choices
 # Campos requeridos en las solicitudes
 APPLICATION_REQUIRED_FIELDS = {
 	'name': {
-		'regex': '^[A-Za-z]{1,20}$',
+		'regex': r'^[A-Za-z]{1,20}$',
 		'description': 'solo letras, máximo 20 caracteres.',
 	},
 	'last_name': {
-		'regex': '^[A-Za-z]{1,20}$',
+		'regex': r'^[A-Za-z]{1,20}$',
 		'description': 'solo letras, máximo 20 caracteres.',
 	},
 	'identification': {
-		'regex': '^[A-Za-z0-9]{1,10}$',
+		'regex': r'^[A-Za-z0-9]{1,10}$',
 		'description': 'números y letras, máximo 10 caracteres.',
 	},
 	'age': {
-		'regex': '^\d{1,2}$',
+		'regex': r'^\d{1,2}$',
 		'description': 'solo letras, máximo 20 caracteres.',
 	},
 	'magic_affinity': {
-		'regex': '^(darkness|light|fire|water|wind|earth)$',
+		'regex': r'^(darkness|light|fire|water|wind|earth)$',
 		'description': 'una única opción entre Oscuridad(darkness), Luz(light), Fuego(fire), Agua(water), Viento(wind) o Tierra(earth).',
 	}
 }

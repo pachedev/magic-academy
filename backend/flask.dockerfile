@@ -22,6 +22,9 @@ EXPOSE 3500
 # Fixes error when executing entry point with bash
 RUN apk update && apk add bash
 
+# Unit test
+RUN chmod u+x ./test.sh
+
 # Specify the command to run on container start
 RUN chmod u+x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

@@ -7,7 +7,7 @@ from app.models.student_application import StudentApplication
 from app.utils import build_response, parse_datetime_to_str
 
 # Consulta todas las asignaciones de Grimorios.
-@bp.route('/', methods=['GET'])
+@bp.route('/', methods=['GET'],strict_slashes=False)
 def get_assignments():
 	try:
 		assignments = db.session.query(GrimorioAssignment).all()
@@ -21,7 +21,7 @@ def get_assignments():
 		return build_response({'message': 'Ocurrio un error obtener las asignaciones.', 'error': str(e)}, 500)
 
 # Consulta todas las asignaciones de Grimorios y las muestra.
-@bp.route('/view')
+@bp.route('/view',strict_slashes=False)
 def index():
 	try:
 		assignments = db.session.query(GrimorioAssignment).all()
