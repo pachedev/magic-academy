@@ -1,0 +1,588 @@
+---
+openapi: 3.0.0
+info:
+  title: Magic Academy API
+  description: "El presente documento contiene el análisis de la información que comprende el CRUD para solicitudes de ingreso de la acadamia de mágica, así como la información obtenida a través del API para dicho propósito."
+  contact:
+    email: gerardo.pacheco.dev@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:3500/
+  description: Magic Academy
+tags:
+- name: Envía solicitud de ingreso
+  description: Crea una nueva solicitud de ingreso
+- name: Actualiza solicitud de ingreso
+  description: Actualizar una solicitud de ingreso existente
+- name: Actualiza estatus de solicitud
+  description: Actualizar status de solicitud de ingreso existente
+- name: Consulta todas las solicitudes
+  description: Obtener todas las solicitudes de ingreso existentes
+- name: Consulta asignaciones de Grimorios
+  description: Obtener todas las asignacioes existentes
+- name: Elimina solicitud de ingreso
+  description: Eliminar asignacioes existentes
+- name: Consulta los Grimorios
+  description: Obtener todos los grimorios existentes para las asignaciones
+paths:
+  /solicitud:
+    post:
+      tags:
+      - Envía solicitud de ingreso
+      summary: Crea una nueva solicitud de ingreso
+      operationId: createStudentApplication
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bodyRequestCreateStudentApplication'
+      responses:
+        "201":
+          description: Registro creado
+          content:
+            application/json:
+              examples:
+                Registro exitoso:
+                  value: |-
+                    {
+                        "application": {
+                            "age": 17,
+                            "assignment_id": 3,
+                            "created_at": "20/05/2024, 08:03:43",
+                            "id": 5,
+                            "identification": "1234567890",
+                            "last_name": "Potter",
+                            "magic_affinity": {
+                                "code": "fire",
+                                "value": "Fuego"
+                            },
+                            "name": "Harry",
+                            "state": {
+                                "code": "assigned",
+                                "value": "Asignada"
+                            },
+                            "updated_at": "20/05/2024, 08:03:43"
+                        },
+                        "message": "Se registro la solicitud correctamente."
+                    }
+        "400":
+          description: Solicitud no valida
+          content:
+            application/json:
+              examples:
+                Solicitud rechazada:
+                  value: |-
+                    {
+                      "message": "Tu solicitud fue rechazada por las siguientes razones: El campo magic_affinity no es valido, se esperan una única opción entre Oscuridad(darkness), Luz(light), Fuego(fire), Agua(water), Viento(wind) o Tierra(earth)."
+                    }
+                Identificador ya usado:
+                  value: |-
+                    {
+                        "message": "Ya existe una solicitud con el identificador: 1234567890."
+                    }
+                BadRequest:
+                  value: |-
+                    {
+                        "message": "Los campos Nombre, Apellido, Identificación, Edad y Afinidad Mágica son requeridos."
+                    }
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error al crear la solicitud.", "error:":"Lorem ipsum"
+                    }
+  /solicitud/{id}:
+    put:
+      tags:
+      - Actualiza solicitud de ingreso
+      summary: Actualizar una solicitud de ingreso existente
+      operationId: updateStudentApplication
+      parameters:
+      - name: id
+        in: path
+        description: ID de la solicitud
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bodyRequestUpateStudentApplication'
+      responses:
+        "200":
+          description: Registro actualizado
+          content:
+            application/json:
+              examples:
+                Actualizacion de solicitud exitosa:
+                  value: |-
+                    {
+                        "application": {
+                            "age": 17,
+                            "assignment_id": 3,
+                            "created_at": "20/05/2024, 08:03:43",
+                            "id": 5,
+                            "identification": "1234567890",
+                            "last_name": "Potter",
+                            "magic_affinity": {
+                                "code": "fire",
+                                "value": "Fuego"
+                            },
+                            "name": "Harry",
+                            "state": {
+                                "code": "assigned",
+                                "value": "Asignada"
+                            },
+                            "updated_at": "20/05/2024, 08:03:43"
+                        },
+                        "message": "Se actualizo la solicitud exitosamente."
+                    }
+        "400":
+          description: Solicitud no valida
+          content:
+            application/json:
+              examples:
+                Solicitud ya asignada:
+                  value: |-
+                    {
+                      "message": "Tu solicitud no fue actualizada por que ya esta asignada."
+                    }
+                Identificador ya usado:
+                  value: |-
+                    {
+                        "message": "Tu solicitud no fue actualizada por que el Identificador 1234567890 ya fue usado."
+                    }
+                BadRequest:
+                  value: |-
+                    {
+                        "message": "Tu solicitud no fue actualizada por las siguientes razones: Los campos Nombre, Apellido, Identificación, Edad y Afinidad Mágica son requeridos."
+                    }
+        "404":
+          description: Solicitud no existente
+          content:
+            application/json:
+              examples:
+                Solicitud no econtrada:
+                  value: |-
+                    {
+                      "message": "La solicitud de ingreso no existe."
+                    }
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error al actualizar la solicitud.", "error:":"Lorem ipsum"
+                    }
+  /solicitud/{id}/status:
+    patch:
+      tags:
+      - Actualiza estatus de solicitud
+      summary: Actualizar status de solicitud de ingreso existente
+      operationId: updateStudentApplicationStatus
+      parameters:
+      - name: id
+        in: path
+        description: ID de la solicitud
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bodyRequestUpateStateStudentApplication'
+      responses:
+        "200":
+          description: Status actualizado
+          content:
+            application/json:
+              examples:
+                Actualizacion de estatus exitosa:
+                  value: |-
+                    {
+                        "application": {
+                            "age": 17,
+                            "assignment_id": 3,
+                            "created_at": "20/05/2024, 08:03:43",
+                            "id": 5,
+                            "identification": "1234567890",
+                            "last_name": "Potter",
+                            "magic_affinity": {
+                                "code": "fire",
+                                "value": "Fuego"
+                            },
+                            "name": "Harry",
+                            "state": {
+                                "code": "assigned",
+                                "value": "Asignada"
+                            },
+                            "updated_at": "20/05/2024, 08:03:43"
+                        },
+                        "message": "Se actualizo el status de la solicitud de ingreso exitosamente."
+                    }
+        "400":
+          description: Solicitud no valida
+          content:
+            application/json:
+              examples:
+                BadRequest:
+                  value: |-
+                    {
+                        "message": "Tu solicitud no fue actualizada por las siguientes razones: El campo status no puede ser igual al status actual de la solicitud de ingreso. or El campo status no es valido."
+                    }
+        "404":
+          description: Solicitud no existente
+          content:
+            application/json:
+              examples:
+                Solicitud no econtrada:
+                  value: |-
+                    {
+                      "message": "La solicitud de ingreso no existe."
+                    }
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error al actualizar el estado de la solicitud.", "error:":"Lorem ipsum"
+                    }
+  /solicitudes:
+    get:
+      tags:
+      - Consulta todas las solicitudes
+      summary: Obtener todas las solicitudes de ingreso existentes
+      operationId: getStudentApplication
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bodyResponseStudentApplications'
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error obtener las solicitudes.", "error:":"Lorem ipsum"
+                    }
+  /asignaciones:
+    get:
+      tags:
+      - Consulta asignaciones de Grimorios
+      summary: Obtener todas las solicitudes de ingreso existentes
+      operationId: getGrimorioAssignment
+      responses:
+        "200":
+          description: Resultados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bodyResponseGrimorioAssignments'
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error obtener las asignaciones.", "error:":"Lorem ipsum"
+                    }
+  /solicitud/{application_id}:
+    delete:
+      tags:
+      - Elimina solicitud de ingreso
+      summary: Eliminar asignacioes existentes
+      operationId: deletStudentApplication
+      parameters:
+      - name: application_id
+        in: path
+        description: ID de la solicitud
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Resultados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bodyResponseDeleteStudentApplication'
+        "404":
+          description: Solicitud no existente
+          content:
+            application/json:
+              examples:
+                Solicitud no econtrada:
+                  value: |-
+                    {
+                      "message": "La solicitud de ingreso no existe."
+                    }
+        "400":
+          description: Solicitud ya asignada
+          content:
+            application/json:
+              examples:
+                Solicitud no econtrada:
+                  value: |-
+                    {
+                      "message": "La solicitud no fue borrada por que ya cuenta con un Grimorio asignado."
+                    }
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error obtener los grimorios.", "error:":"Lorem ipsum"
+                    }
+  /grimorios:
+    get:
+      tags:
+      - Consulta los Grimorios
+      summary: Obtener todos los grimorios existentes para las asignaciones
+      operationId: getGrimorios
+      responses:
+        "200":
+          description: Resultados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bodyResponseGrimorios'
+        "500":
+          description: Ocurrio un error con el servicio
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: |-
+                    {
+                        "message": "Ocurrio un error obtener los grimorios.", "error:":"Lorem ipsum"
+                    }
+components:
+  schemas:
+    bodyRequestCreateStudentApplication:
+      required:
+      - age
+      - identification
+      - last_name
+      - magic_affinity
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Harry
+        last_name:
+          type: string
+          example: Potter
+        identification:
+          type: string
+          format: string
+          example: "1234567890"
+        age:
+          type: integer
+          format: int64
+          example: 17
+        magic_affinity:
+          type: string
+          example: fire
+    bodyRequestUpateStudentApplication:
+      required:
+      - age
+      - identification
+      - last_name
+      - magic_affinity
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Harry
+        last_name:
+          type: string
+          example: Potter
+        identification:
+          type: string
+          format: string
+          example: "1234567890"
+        age:
+          type: integer
+          format: int64
+          example: 17
+        magic_affinity:
+          type: string
+          example: fire
+    bodyRequestUpateStateStudentApplication:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+          example: rejected o assigned
+    bodyResponseStudentApplications:
+      required:
+      - applications
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          example: Solicitudes obtenidas exitosamente.
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/bodyResponseStudentApplications_applications'
+    bodyResponseGrimorioAssignments:
+      required:
+      - assignments
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          example: Asignaciones obtenidas exitosamente.
+        assignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/bodyResponseGrimorioAssignments_assignments'
+    bodyResponseDeleteStudentApplication:
+      required:
+      - message
+      type: object
+      properties:
+        status:
+          type: string
+          example: Se ha eliminado la solicitud de ingreso.
+    bodyResponseGrimorios:
+      required:
+      - grimorios
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          example: Grimorios obtenidos exitosamente.
+        grimorios:
+          type: array
+          items:
+            $ref: '#/components/schemas/bodyResponseGrimorioAssignments_grimorio'
+    bodyResponseStudentApplications_state:
+      type: object
+      properties:
+        code:
+          type: string
+          example: assigned
+        value:
+          type: string
+          example: Asignada
+    bodyResponseStudentApplications_magic_affinity:
+      type: object
+      properties:
+        code:
+          type: string
+          example: light
+        value:
+          type: string
+          example: Luz
+    bodyResponseStudentApplications_applications:
+      type: object
+      properties:
+        id:
+          type: string
+          example: number
+        name:
+          type: string
+          example: Harry
+        last_name:
+          type: string
+          example: Potter
+        identification:
+          type: string
+          example: "1234567890"
+        assignment_id:
+          type: integer
+          format: int64
+          example: 1
+        state:
+          $ref: '#/components/schemas/bodyResponseStudentApplications_state'
+        magic_affinity:
+          $ref: '#/components/schemas/bodyResponseStudentApplications_magic_affinity'
+        created_at:
+          type: string
+          example: "19/05/2024, 22:37:44"
+        updated_at:
+          type: string
+          example: "19/05/2024, 22:39:00"
+    bodyResponseGrimorioAssignments_grimorio:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Grimorio de tres hojas
+        image:
+          type: string
+          example: https://raw.githubusercontent.com/pachedev/magic-academy/main/images/grimorios/three_leaf.png
+        created_at:
+          type: string
+          example: "19/05/2024, 22:37:44"
+    bodyResponseGrimorioAssignments_assignments:
+      type: object
+      properties:
+        id:
+          type: string
+          example: number
+        application:
+          $ref: '#/components/schemas/bodyResponseStudentApplications_applications'
+        grimorio:
+          $ref: '#/components/schemas/bodyResponseGrimorioAssignments_grimorio'
+        created_at:
+          type: string
+          example: "19/05/2024, 22:37:44"
