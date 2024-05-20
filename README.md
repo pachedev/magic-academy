@@ -72,7 +72,7 @@ Este diagrama visualiza la estructura y las relaciones entre las tablas, lo que 
 git clone https://github.com/pachedev/magic-academy
 ```
 
-3. Clonar el repositorio
+3. Acceder al repositorio
 
 Dirigete a la carpeta magic-academy que se genero al clonar el repositorio
 
@@ -80,7 +80,7 @@ Dirigete a la carpeta magic-academy que se genero al clonar el repositorio
 cd magic-academy
 ```
 
-3. Ejecuta el siguientes comando como se muestra a continuación
+4. Ejecuta el siguientes comando como se muestra a continuación
 
 ```bash
 docker compose up -d
