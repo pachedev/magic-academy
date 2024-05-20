@@ -2,12 +2,14 @@ services:
   # Next.js service
   frontend:
       container_name: nextjs_app
-      image: nextjs_app:1.0.0
+      image: nextjs_app:1.0.1
       build:
         context: ./frontend
         dockerfile: frontend.dockerfile
       ports:
         - 3000:3000
+      environment:
+        - NEXT_PUBLIC_API_URL=http://localhost:3500
       restart: always
       depends_on:
         - backend
